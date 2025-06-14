@@ -42,6 +42,7 @@ declare class GlyUi {
   public apply(): GlyUi;
 }
 
+/** @noSelf **/
 interface GlyStdApp {
   exit(): void;
   height: number;
@@ -61,6 +62,7 @@ interface GlyStdArray {
   unique<T>(array: T[]): T[];
 }
 
+/** @noSelf **/
 interface GlyStdBus {
   abort(): void;
   emit(key: string, ...args: unknown[]): void;
@@ -68,6 +70,7 @@ interface GlyStdBus {
   trigger(key: string): void;
 }
 
+/** @noSelf **/
 interface GlyStdColor {
   beige: number;
   black: number;
@@ -96,6 +99,7 @@ interface GlyStdColor {
   yellow: number;
 }
 
+/** @noSelf **/
 interface GlyStdDraw {
   clear(hex: number): void;
   color(hex: number): void;
@@ -104,11 +108,13 @@ interface GlyStdDraw {
   rect(mode: number, x: number, y: number, w: number, h: number): void;
 }
 
+/** @noSelf **/
 interface GlyStdHash {
   djb2(digest: string): number;
   fingerprint(): number;
 }
 
+/** @noSelf **/
 interface GlyStdHttp {
   delete(url: string): GlyHttp;
   get(url: string): GlyHttp;
@@ -118,6 +124,7 @@ interface GlyStdHttp {
   put(url: string): GlyHttp;
 }
 
+/** @noSelf **/
 interface GlyStdI18n {
   back(): void;
   get_language(): string;
@@ -126,11 +133,13 @@ interface GlyStdI18n {
   set_language(language: string): void;
 }
 
+/** @noSelf **/
 interface GlyStdImage {
   draw(src: string, x?: number, y?: number): void;
   load(src: string): boolean;
 }
 
+/** @noSelf **/
 interface GlyStdKey {
   axis: {
     a: 0 | 1;
@@ -159,6 +168,7 @@ interface GlyStdKey {
   };
 }
 
+/** @noSelf **/
 interface GlyStdLog {
   debug(message: string): void;
   error(message: string): void;
@@ -168,6 +178,7 @@ interface GlyStdLog {
   warn(message: string): void;
 }
 
+/** @noSelf **/
 interface GlyStdMath {
   abs(n: number): number;
   clamp(n: number, min: number, max: number): number;
@@ -184,6 +195,7 @@ interface GlyStdMath {
   min(n1: number, n2: number, ...nx: number[]): number;
 }
 
+/** @noSelf **/
 interface GlyStdMathLibC {
   acos(x: number): number;
   asin(x: number): number;
@@ -212,6 +224,7 @@ interface GlyStdMathLibC {
   tanh(x: number): number;
 }
 
+/** @noSelf **/
 interface GlyStdMathWave {
   saw(t: number, freq: number): number;
   sine(t: number, freq: number): number;
@@ -219,10 +232,14 @@ interface GlyStdMathWave {
   triangule(t: number, freq: number): number;
 }
 
+/** @noSelf **/
 interface GlyStdMedia {
   video(channel?: number): GlyMedia;
+  music(channel?: number): GlyMedia;
+  youtube(channel?: number): GlyMedia;
 }
 
+/** @noSelf **/
 interface GlyStdMemory {
   cache(key: string, load: () => unknown, unload?: (value: unknown) => void): unknown;
   cache_get(key: string): unknown;
@@ -231,6 +248,7 @@ interface GlyStdMemory {
   unset(key: string): void;
 }
 
+/** @noSelf **/
 interface GlyStdNode {
   emit(application: GlyApp, key: string, ...args: unknown[]): void;
   kill(application: GlyApp): void;
@@ -240,11 +258,13 @@ interface GlyStdNode {
   spawn(application: GlyNode): GlyApp;
 }
 
+/** @noSelf **/
 interface GlyStdStorage {
   get(key: string): GlyStorage;
   set(key: string, value: unknown): GlyStorage;
 }
 
+/** @noSelf **/
 interface GlyStdText {
   font_default(size: number): void;
   font_name(face: string): void;
@@ -256,11 +276,13 @@ interface GlyStdText {
   put(x: number, y: number, text: string | number, size?: number): void;
 }
 
+/** @noSelf **/
 interface GlyStdUi {
   grid(classlist: string): GlyUi;
   slide(classlist: string): GlyUi;
 }
 
+/** @noSelf **/
 export interface GlyStdNano {
   color: GlyStdColor;
   delta: number;
@@ -271,6 +293,7 @@ export interface GlyStdNano {
   text: GlyStdText;
 }
 
+/** @noSelf **/
 export interface GlyStdMicro extends GlyStdNano {
   app: GlyStdApp;
   array: GlyStdArray;
@@ -278,6 +301,7 @@ export interface GlyStdMicro extends GlyStdNano {
   mem: GlyStdMemory;
 }
 
+/** @noSelf **/
 export interface GlyStdLite extends GlyStdMicro {
   getenv(key: string): string;
   hash: GlyStdHash;
@@ -288,6 +312,7 @@ export interface GlyStdLite extends GlyStdMicro {
   storage: GlyStdStorage;
 }
 
+/** @noSelf **/
 export interface GlyStd extends GlyStdLite {
   bus: GlyStdBus;
   h: GlyStdJsx;
