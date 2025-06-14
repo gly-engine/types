@@ -263,9 +263,11 @@ interface GlyStdUi {
 
 export interface GlyStdNano {
   color: GlyStdColor;
+  delta: number;
   draw: GlyStdDraw;
   image: GlyStdImage;
   key: GlyStdKey;
+  milis: number;
   text: GlyStdText;
 }
 
