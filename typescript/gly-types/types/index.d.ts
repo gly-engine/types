@@ -1,44 +1,45 @@
-export type GlyApp = object
-export type GlyStdJsx = (el: string | object, attributes?: object | null, ...childs: Array<object>) => GlyApp
+export type GlyNode = Record<string, unknown>;
+export type GlyApp = GlyNode & { width: number; height: number };
+export type GlyStdJsx = (el: string | object, attributes?: object | null, ...childs: Array<object>) => GlyApp;
 
 declare class GlyHttp {
-  public json(): GlyHttp
-  public fast(): GlyHttp  
-  public noforce(): GlyHttp
-  public param(key: string, value: string): GlyHttp
-  public header(key: string, value: string): GlyHttp
-  public body(content: string): GlyHttp
-  public success(std: GlyStd, data: GlyApp): GlyHttp
-  public failed(std: GlyStd, data: GlyApp): GlyHttp
-  public error(std: GlyStd, data: GlyApp): GlyHttp
-  public run(): void
+  public json(): GlyHttp;
+  public fast(): GlyHttp;
+  public noforce(): GlyHttp;
+  public param(key: string, value: string): GlyHttp;
+  public header(key: string, value: string): GlyHttp;
+  public body(content: string): GlyHttp;
+  public success(std: GlyStd, data: GlyApp): GlyHttp;
+  public failed(std: GlyStd, data: GlyApp): GlyHttp;
+  public error(std: GlyStd, data: GlyApp): GlyHttp;
+  public run(): void;
 }
 
 declare class GlyMedia {
-  public src(url: string): GlyMedia
-  public play(): GlyMedia
-  public pause(): GlyMedia
-  public resume(): GlyMedia
-  public stop(): GlyMedia
-  public resize(width: number, height: number): GlyMedia
-  public position(pos_x: number, pos_y: number): GlyMedia
+  public src(url: string): GlyMedia;
+  public play(): GlyMedia;
+  public pause(): GlyMedia;
+  public resume(): GlyMedia;
+  public stop(): GlyMedia;
+  public resize(width: number, height: number): GlyMedia;
+  public position(pos_x: number, pos_y: number): GlyMedia;
 }
 
 declare class GlyStorage {
-  as(key: string, cast?: (value: string) => unknown): GlyStorage
-  default(value: string): void
-  callbacks(handler: (value: string) => void): GlyStorage
-  run(): void
+  public as(key: string, cast?: (value: string) => unknown): GlyStorage;
+  public default(value: string): void;
+  public callbacks(handler: (value: string) => void): GlyStorage;
+  public run(): void;
 }
 
 declare class GlyUi {
-  public add(node: GlyApp): GlyUi
-  public style(classlist): GlyUi
-  public get_item(id: number): GlyApp
-  public add_items(nodes: GlyApp[]): GlyUi
-  public gap(size: number): GlyUi
-  public margin(size: number): GlyUi
-  public apply(): GlyUi
+  public add(node: GlyNode): GlyUi;
+  public style(classlist): GlyUi;
+  public get_item(id: number): GlyApp;
+  public add_items(nodes: GlyNode[]): GlyUi;
+  public gap(size: number): GlyUi;
+  public margin(size: number): GlyUi;
+  public apply(): GlyUi;
 }
 
 interface GlyStdApp {
@@ -99,22 +100,22 @@ interface GlyStdDraw {
   clear(hex: number): void;
   color(hex: number): void;
   line(x1: number, y1: number, x2: number, y2: number): void;
-  poly(mode: number, verts: Array<number>, x?: number, y?:number, scale?: number, angle?: number, ox?: number, oy?: number): void;
-  rect(mode: number, x: number, y: number, w: number, h:number): void;
+  poly(mode: number, verts: Array<number>, x?: number, y?: number, scale?: number, angle?: number, ox?: number, oy?: number): void;
+  rect(mode: number, x: number, y: number, w: number, h: number): void;
 }
 
 interface GlyStdHash {
-  djb2(digest: string): number
-  fingerprint(): number
+  djb2(digest: string): number;
+  fingerprint(): number;
 }
 
 interface GlyStdHttp {
-  delete(url: string): GlyHttp,
-  get(url: string): GlyHttp,
-  head(url: string): GlyHttp,
-  patch(url: string): GlyHttp,
-  post(url: string): GlyHttp,
-  put(url: string): GlyHttp
+  delete(url: string): GlyHttp;
+  get(url: string): GlyHttp;
+  head(url: string): GlyHttp;
+  patch(url: string): GlyHttp;
+  post(url: string): GlyHttp;
+  put(url: string): GlyHttp;
 }
 
 interface GlyStdI18n {
@@ -178,7 +179,7 @@ interface GlyStdMath {
   lerp(start: number, end: number, alpha: number): number;
   map(n: number, in_min: number, in_max: number, out_min: number, out_max: number): number;
   max(n: number[]): number;
-  max(n1:number, n2: number, ...nx: number[]): number;
+  max(n1: number, n2: number, ...nx: number[]): number;
   min(n: number[]): number;
   min(n1: number, n2: number, ...nx: number[]): number;
 }
@@ -219,7 +220,7 @@ interface GlyStdMathWave {
 }
 
 interface GlyStdMedia {
-  video(channel?: number): GlyMedia
+  video(channel?: number): GlyMedia;
 }
 
 interface GlyStdMemory {
@@ -233,15 +234,15 @@ interface GlyStdMemory {
 interface GlyStdNode {
   emit(application: GlyApp, key: string, ...args: unknown[]): void;
   kill(application: GlyApp): void;
-  load(application: GlyApp): void;
+  load(application: GlyNode): GlyNode;
   pause(application: GlyApp, key: string): void;
   resume(application: GlyApp, key: string): void;
-  spawn(application: GlyApp): void;
+  spawn(application: GlyNode): GlyApp;
 }
 
 interface GlyStdStorage {
-  get(key: string): GlyStorage
-  set(key: string, value: unknown): GlyStorage
+  get(key: string): GlyStorage;
+  set(key: string, value: unknown): GlyStorage;
 }
 
 interface GlyStdText {
@@ -252,12 +253,12 @@ interface GlyStdText {
   mensure(text: string | number): [number, number];
   print(x: number, y: number, text: string | number): void;
   print_ex(x: number, y: number, text: string | number, align_x?: -1 | 0 | 1, align_y?: -1 | 0 | 1): [number, number];
-  put(x: number, y: number, text: string | number, size?: number): void
+  put(x: number, y: number, text: string | number, size?: number): void;
 }
 
 interface GlyStdUi {
-  grid(classlist: string): GlyUi
-  slide(classlist: string): GlyUi
+  grid(classlist: string): GlyUi;
+  slide(classlist: string): GlyUi;
 }
 
 export interface GlyStdNano {
@@ -276,18 +277,18 @@ export interface GlyStdMicro extends GlyStdNano {
 }
 
 export interface GlyStdLite extends GlyStdMicro {
-  getenv(key: string): string
-  hash: GlyStdHash,
-  http: GlyStdHttp
-  i18n: GlyStdI18n,
-  log: GlyStdLog
-  media: GlyStdMedia
-  storage: GlyStdStorage
+  getenv(key: string): string;
+  hash: GlyStdHash;
+  http: GlyStdHttp;
+  i18n: GlyStdI18n;
+  log: GlyStdLog;
+  media: GlyStdMedia;
+  storage: GlyStdStorage;
 }
 
 export interface GlyStd extends GlyStdLite {
-  bus: GlyStdBus,
-  h: GlyStdJsx,
-  node: GlyStdNode,
-  ui: GlyStdUi
+  bus: GlyStdBus;
+  h: GlyStdJsx;
+  node: GlyStdNode;
+  ui: GlyStdUi;
 }
