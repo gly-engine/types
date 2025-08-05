@@ -6,8 +6,10 @@ declare namespace JSX {
   }
 
   interface IntrinsicElements {
-    grid: { class: string, children?: childElement | Array<childElement>};
+    grid: { class: string, span?: number, style?: string, dir?: 1 | 0, children?: childElement | Array<childElement>};
+    item: { span?: number, style?: string, children: childElement}
     node: { children?: never, [key: string]: unknown;};
+    style: { class: string, children?: never} | {[key: string]: number};
   }
   
   interface ElementChildrenAttribute {
