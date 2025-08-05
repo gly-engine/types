@@ -9,6 +9,10 @@ export type GlyApp = GlyNode & {
 
 export type GlyStdJsx = (el: string | object, attributes?: object | null, ...childs: Array<object>) => GlyApp;
 
+export type GlyHandlerArgs = (this: void, ...args: unknown[]) => unknown
+
+export type GlyHandlerValueString = (this: void, value: string) => unknown
+
 declare class GlyHttp {
   public json(): GlyHttp;
   public fast(): GlyHttp;
@@ -33,9 +37,9 @@ declare class GlyMedia {
 }
 
 declare class GlyStorage {
-  public as(key: string, cast?: (value: string) => unknown): GlyStorage;
+  public as(key: string, cast?: GlyHandlerValueString): GlyStorage;
   public default(value: string): void;
-  public callbacks(handler: (value: string) => void): GlyStorage;
+  public callbacks(handler: GlyHandlerValueString): GlyStorage;
   public run(): void;
 }
 
@@ -72,7 +76,7 @@ interface GlyStdArray {
 interface GlyStdBus {
   abort(): void;
   emit(key: string, ...args: unknown[]): void;
-  listen(key: string, handler: (...args: unknown[]) => void): void;
+  listen(key: string, handler: GlyHandlerArgs): void;
   trigger(key: string): void;
 }
 
