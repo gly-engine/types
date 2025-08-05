@@ -1,5 +1,12 @@
 export type GlyNode = Record<string, unknown>;
-export type GlyApp = GlyNode & { width: number; height: number };
+
+export type GlyApp = GlyNode & {
+  data: {
+    width: number;
+    height: number;
+  } & Record<string, unknown>;
+};
+
 export type GlyStdJsx = (el: string | object, attributes?: object | null, ...childs: Array<object>) => GlyApp;
 
 declare class GlyHttp {
@@ -9,6 +16,7 @@ declare class GlyHttp {
   public param(key: string, value: string): GlyHttp;
   public header(key: string, value: string): GlyHttp;
   public body(content: string): GlyHttp;
+  public body(content: object): GlyHttp;
   public success(std: GlyStd, data: GlyApp): GlyHttp;
   public failed(std: GlyStd, data: GlyApp): GlyHttp;
   public error(std: GlyStd, data: GlyApp): GlyHttp;
@@ -21,8 +29,7 @@ declare class GlyMedia {
   public pause(): GlyMedia;
   public resume(): GlyMedia;
   public stop(): GlyMedia;
-  public resize(width: number, height: number): GlyMedia;
-  public position(pos_x: number, pos_y: number): GlyMedia;
+  public position(x: number, y: number, w: number, h: number): GlyMedia;
 }
 
 declare class GlyStorage {
@@ -34,12 +41,11 @@ declare class GlyStorage {
 
 declare class GlyUi {
   public add(node: GlyNode): GlyUi;
-  public style(classlist): GlyUi;
+  public add(node: GlyNode, size: number): GlyUi;
   public get_item(id: number): GlyApp;
+  public get_items(): Array<GlyApp>;
   public add_items(nodes: GlyNode[]): GlyUi;
-  public gap(size: number): GlyUi;
-  public margin(size: number): GlyUi;
-  public apply(): GlyUi;
+  public remove(app: GlyApp): GlyUi;
 }
 
 /** @noSelf **/
@@ -106,6 +112,7 @@ interface GlyStdDraw {
   line(x1: number, y1: number, x2: number, y2: number): void;
   poly(mode: number, verts: Array<number>, x?: number, y?: number, scale?: number, angle?: number, ox?: number, oy?: number): void;
   rect(mode: number, x: number, y: number, w: number, h: number): void;
+  rect2(mode: number, x: number, y: number, w: number, h: number, r: number): void;
 }
 
 /** @noSelf **/
@@ -135,6 +142,7 @@ interface GlyStdI18n {
 
 /** @noSelf **/
 interface GlyStdImage {
+  mensure(src: string): [number, number];
   draw(src: string, x?: number, y?: number): void;
   load(src: string): boolean;
 }
@@ -253,7 +261,9 @@ interface GlyStdNode {
   emit(application: GlyApp, key: string, ...args: unknown[]): void;
   kill(application: GlyApp): void;
   load(application: GlyNode): GlyNode;
+  pause(application: GlyApp): void;
   pause(application: GlyApp, key: string): void;
+  resume(application: GlyApp): void;
   resume(application: GlyApp, key: string): void;
   spawn(application: GlyNode): GlyApp;
 }
@@ -270,6 +280,7 @@ interface GlyStdText {
   font_name(face: string): void;
   font_previous(): void;
   font_size(size: number): void;
+  is_tui(): boolean;
   mensure(text: string | number): [number, number];
   print(x: number, y: number, text: string | number): void;
   print_ex(x: number, y: number, text: string | number, align_x?: -1 | 0 | 1, align_y?: -1 | 0 | 1): [number, number];
@@ -279,7 +290,8 @@ interface GlyStdText {
 /** @noSelf **/
 interface GlyStdUi {
   grid(classlist: string): GlyUi;
-  slide(classlist: string): GlyUi;
+  style(classlist: string): GlyUi;
+  style(classlist: string, stylesheet: object): GlyUi;
 }
 
 /** @noSelf **/
@@ -297,7 +309,7 @@ export interface GlyStdNano {
 export interface GlyStdMicro extends GlyStdNano {
   app: GlyStdApp;
   array: GlyStdArray;
-  math: GlyStdMath & GlyStdMathLibC & GlyStdMathWave;
+  math: GlyStdMath & GlyStdMathLibC;
   mem: GlyStdMemory;
 }
 
