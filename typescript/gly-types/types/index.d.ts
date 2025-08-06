@@ -1,3 +1,7 @@
+/**
+ * @version 0.2.2
+ */
+
 export type GlyNode = Record<string, unknown>;
 
 export type GlyApp = GlyNode & {
@@ -13,6 +17,8 @@ export type GlyHandlerArgs = (this: void, ...args: unknown[]) => unknown
 
 export type GlyHandlerValueString = (this: void, value: string) => unknown
 
+export type GlyHandlerStdData<T = GlyStd> = (this: void, std: T, data: GlyApp) => unknown
+
 declare class GlyHttp {
   public json(): GlyHttp;
   public fast(): GlyHttp;
@@ -21,9 +27,9 @@ declare class GlyHttp {
   public header(key: string, value: string): GlyHttp;
   public body(content: string): GlyHttp;
   public body(content: object): GlyHttp;
-  public success(std: GlyStd, data: GlyApp): GlyHttp;
-  public failed(std: GlyStd, data: GlyApp): GlyHttp;
-  public error(std: GlyStd, data: GlyApp): GlyHttp;
+  public success(handler: GlyHandlerStdData<GlyStdWithHttpResponse>): GlyHttp;
+  public failed(handler: GlyHandlerStdData<GlyStdWithHttpResponse>): GlyHttp;
+  public error(handler: GlyHandlerStdData<GlyStdWithHttpResponse>): GlyHttp;
   public run(): void;
 }
 
@@ -133,6 +139,14 @@ interface GlyStdHttp {
   patch(url: string): GlyHttp;
   post(url: string): GlyHttp;
   put(url: string): GlyHttp;
+}
+
+/** @noSelf **/
+interface GlyStdHttpResponse {
+  ok: boolean,
+  status: number
+  error?: string
+  body: string | object
 }
 
 /** @noSelf **/
@@ -326,6 +340,11 @@ export interface GlyStdLite extends GlyStdMicro {
   log: GlyStdLog;
   media: GlyStdMedia;
   storage: GlyStdStorage;
+}
+
+/** @noSelf **/
+export interface GlyStdWithHttpResponse extends GlyStd {
+  http: GlyStdHttp & GlyStdHttpResponse
 }
 
 /** @noSelf **/

@@ -1,13 +1,14 @@
-declare namespace JSX {
-  type childElement = JSX.Element | object
+/**
+ * @version 0.2.1
+ */
 
-  interface Element {
-    __brand: JSX.IntrinsicElements['node'] | JSX.IntrinsicElements['grid'];
+declare namespace JSX {
+  interface Element extends Record<string, Function> {
   }
 
   interface IntrinsicElements {
-    grid: { class: string, span?: number, style?: string, dir?: 1 | 0, children?: childElement | Array<childElement>};
-    item: { span?: number, style?: string, children: childElement}
+    grid: { class: string, span?: number, style?: string, dir?: 1 | 0, children?: JSX.Element | Array<JSX.Element>};
+    item: ({ span: number} | {style: string}) & {children: JSX.Element}
     node: { children?: never, [key: string]: unknown;};
     style: { class: string, children?: never} | {[key: string]: number};
   }
