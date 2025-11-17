@@ -21,7 +21,8 @@ jobs:
       -
         run: >-
           sed -i
-          "s#\"version\": *\"[^\"]*\"#\"version\": \"$(sed -n 's/.*@version\s\+\([0-9.]\+\).*/\1/p' ${{ github.event.inputs.npm }}/types/index.d.ts)\"#"
+          "s#\"version\": *\"[^\"]*\"#\"version\": \"$(sed -n 's/.*@version\s\+\([0-9.]\+\).*/\1/p'
+          ${{ github.event.inputs.npm }}/$(jq -r .main ${{ github.event.inputs.npm }}/package.json))\"#"
           ${{ github.event.inputs.npm }}/package.json
       -
         uses: actions/setup-node@v2

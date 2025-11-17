@@ -1,0 +1,15 @@
+{
+    "name": "@gamely/tstl-number",
+    "version": "",
+    "author": "RodrigoDornelles",
+    "license": "Apache-2.0",
+    "homepage": "https://typescripttolua.github.io/docs/api/plugins",
+    "repository": "https://github.com/gly-engine/types",
+    "funding": "https://github.com/sponsors/RodrigoDornelles",
+    "bugs": "https://github.com/gly-engine/types/issues",
+    "description": "Plugin that transforms large decimal numeric literals into hexadecimal identifiers, avoiding precision issues in Fengari.",
+    "main": "index.ts",
+    "keywords": [
+        "lua"
+    ]
+}
