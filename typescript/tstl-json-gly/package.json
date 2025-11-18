@@ -12,5 +12,12 @@
     "keywords": [
         "gly-engine",
         "lua"
-    ]
+    ],
+    "scripts": {
+        "build": "tsc index.ts --lib es6"
+    },
+    "devDependencies": {
+        "typescript": ">=5.0.0",
+        "typescript-to-lua": ">=1.0.0"
+    }
 }
