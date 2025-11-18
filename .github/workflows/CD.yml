@@ -20,11 +20,11 @@ jobs:
         uses: actions/checkout@master
       -
         run: >-
-          jq -r .dependencies package.json && npm install || true
+          (jq -r .dependencies package.json && npm install) || true
         working-directory: ${{ github.event.inputs.npm }}
       -
         run: >-
-          jq -r .scripts.build package.json && npm run build || true
+          (jq -r .scripts.build package.json && npm run build) || true
         working-directory: ${{ github.event.inputs.npm }}
       -
         run: >-
