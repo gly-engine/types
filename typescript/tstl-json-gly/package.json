@@ -1,0 +1,16 @@
+{
+    "name": "@gamely/tstl-json-gly",
+    "version": "",
+    "author": "RodrigoDornelles",
+    "license": "Apache-2.0",
+    "homepage": "https://gly-engine.github.io/gly-engine/",
+    "repository": "https://github.com/gly-engine/types",
+    "funding": "https://github.com/sponsors/RodrigoDornelles",
+    "bugs": "https://github.com/gly-engine/types/issues",
+    "description": "Plugin adapting JSON.parse/stringify to std.json.decode/encode for Gly Engine compatibility.",
+    "main": "index.ts",
+    "keywords": [
+        "gly-engine",
+        "lua"
+    ]
+}
