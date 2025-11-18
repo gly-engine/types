@@ -2,8 +2,10 @@ tmp
 dist
 .DS_Store
 Thumbs.db
+*.js
 *.lock
 *-lock.json
 .dart_tool
 .fvm
 cli.lua
+node_modules

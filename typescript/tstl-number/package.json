@@ -8,8 +8,16 @@
     "funding": "https://github.com/sponsors/RodrigoDornelles",
     "bugs": "https://github.com/gly-engine/types/issues",
     "description": "Plugin that transforms large decimal numeric literals into hexadecimal identifiers, avoiding precision issues in Fengari.",
-    "main": "index.ts",
+    "main": "index.js",
+    "source": "index.ts",
     "keywords": [
         "lua"
-    ]
+    ],
+    "scripts": {
+        "build": "tsc index.ts --lib es6"
+    },
+    "devDependencies": {
+        "typescript": ">=5.0.0",
+        "typescript-to-lua": ">=1.0.0"
+    }
 }

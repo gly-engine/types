@@ -20,9 +20,17 @@ jobs:
         uses: actions/checkout@master
       -
         run: >-
+          (jq -r .dependencies package.json && npm install) || true
+        working-directory: ${{ github.event.inputs.npm }}
+      -
+        run: >-
+          (jq -r .scripts.build package.json && npm run build) || true
+        working-directory: ${{ github.event.inputs.npm }}
+      -
+        run: >-
           sed -i
           "s#\"version\": *\"[^\"]*\"#\"version\": \"$(sed -n 's/.*@version\s\+\([0-9.]\+\).*/\1/p'
-          ${{ github.event.inputs.npm }}/$(jq -r .main ${{ github.event.inputs.npm }}/package.json))\"#"
+          ${{ github.event.inputs.npm }}/$(jq -r '.source // .main' ${{ github.event.inputs.npm }}/package.json))\"#"
           ${{ github.event.inputs.npm }}/package.json
       -
         uses: actions/setup-node@v2

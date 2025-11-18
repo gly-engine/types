@@ -8,9 +8,17 @@
     "funding": "https://github.com/sponsors/RodrigoDornelles",
     "bugs": "https://github.com/gly-engine/types/issues",
     "description": "Plugin adapting JSON.parse/stringify to std.json.decode/encode for Gly Engine compatibility.",
-    "main": "index.ts",
+    "main": "index.js",
+    "source": "index.ts",
     "keywords": [
         "gly-engine",
         "lua"
-    ]
+    ],
+    "scripts": {
+        "build": "tsc index.ts --lib es6"
+    },
+    "devDependencies": {
+        "typescript": ">=5.0.0",
+        "typescript-to-lua": ">=1.0.0"
+    }
 }
