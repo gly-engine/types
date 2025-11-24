@@ -1,7 +1,0 @@
-name: gly_std
-description: Dart bindings for the Lua-based Gly Engine framework.
-version: 0.0.20
-license: WTFPL
-homepage: https://docs.gamely.com.br/group__dart
-environment:
-  sdk: ">=3.2.0 <4.0.0"
