@@ -1,13 +1,35 @@
 /**
- * @version 0.0.1
+ * @version 0.0.2
  */
 import { execSync } from "child_process";
 import { readFileSync } from "fs";
 import { join } from "path";
+import { createHash } from "crypto";
 import * as tstl from "typescript-to-lua";
 
-function isNodeModule(id: string): boolean {
+function isNodeModule(id: string) {
   return !id.startsWith(".") && !id.startsWith("/") && !id.includes(":");
+}
+
+function getModuleName(id: string) {
+  id = id.trim().replace(/\/+/g, "/");
+
+  if (id.startsWith("@")) {
+    const match = id.match(/^@[\w_-]+\/[\w_-]+/);
+    return match ? match[0] : id;
+  }
+
+  const match = id.match(/^[\w_-]+/);
+  return match ? match[0] : id;
+}
+
+function luaBuilder(rootdir: string, src: string, outdir: string) {
+  execSync(`npx gly-cli build ${src} --outdir ${outdir} --bundler`, {
+    cwd: join(rootdir, '..'),
+    encoding: 'utf-8'
+  })
+
+  return `${outdir}/game.lua`
 }
 
 const plugin: tstl.Plugin = {
@@ -21,16 +43,24 @@ const plugin: tstl.Plugin = {
       return moduleIdentifier;
     }
 
-    const PATH_PACKAGE_JSON = require.resolve(`${moduleIdentifier}/package.json`);
-    const CFGS_PACKAGE_JSON = JSON.parse(readFileSync(PATH_PACKAGE_JSON).toString());
-    const PATH_MAIN_MODULE = require.resolve(`${moduleIdentifier}/${CFGS_PACKAGE_JSON.main}`);
-    const PATH_DIST_MODULE = `${options.outDir}/${moduleIdentifier}/dist`
+    const MODULE_NAME = getModuleName(moduleIdentifier);
+    const PATH_PACKAGE_JSON = require.resolve(`${MODULE_NAME}/package.json`);
 
-    execSync(`npx gly-cli build ${PATH_MAIN_MODULE} --outdir ${PATH_DIST_MODULE} --bundler`, {
-      cwd: join(PATH_PACKAGE_JSON, '..')
-    })
-   
-    return `${PATH_DIST_MODULE}/game.lua`;
+    if (MODULE_NAME === moduleIdentifier) {
+      const CFGS_PACKAGE_JSON = JSON.parse(readFileSync(PATH_PACKAGE_JSON).toString());
+      const PATH_MAIN_MODULE = require.resolve(`${moduleIdentifier}/${CFGS_PACKAGE_JSON.main}`);
+      const PATH_DIST_MODULE = `${options.outDir}/${moduleIdentifier}/dist`;
+      return luaBuilder(PATH_PACKAGE_JSON, PATH_MAIN_MODULE, PATH_DIST_MODULE);
+    }
+
+    if (emitHost.fileExists(`node_modules/${moduleIdentifier}.lua`)) {
+      const FRAGMENT = moduleIdentifier.slice(MODULE_NAME.length + 1);
+      const IDENTIFIER = createHash("md5").update(moduleIdentifier).digest("hex").slice(0, 7);
+      const PATH_DIST_MODULE = `${MODULE_NAME}-${IDENTIFIER}/${FRAGMENT}`;
+      return luaBuilder(PATH_PACKAGE_JSON, `${FRAGMENT}.lua`, `${options.outDir}/${PATH_DIST_MODULE}`);
+    }
+
+    return undefined;
   },
 };
 
