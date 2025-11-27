@@ -1,5 +1,5 @@
 /**
- * @version 0.2.2
+ * @version 0.2.3
  */
 
 export type GlyNode = Record<string, unknown>;
@@ -30,6 +30,7 @@ declare class GlyHttp {
   public success(handler: GlyHandlerStdData<GlyStdWithHttpResponse>): GlyHttp;
   public failed(handler: GlyHandlerStdData<GlyStdWithHttpResponse>): GlyHttp;
   public error(handler: GlyHandlerStdData<GlyStdWithHttpResponse>): GlyHttp;
+  public done(handler: GlyHandlerStdData<GlyStdWithHttpResponse>): GlyHttp;
   public run(): void;
 }
 
@@ -81,6 +82,7 @@ interface GlyStdArray {
 /** @noSelf **/
 interface GlyStdBus {
   abort(): void;
+  emit_next(key: string, ...args: unknown[]): void;
   emit(key: string, ...args: unknown[]): void;
   listen(key: string, handler: GlyHandlerArgs): void;
   trigger(key: string): void;
@@ -160,9 +162,14 @@ interface GlyStdI18n {
 
 /** @noSelf **/
 interface GlyStdImage {
+  mensure_height(src: string): number;
+  mensure_width(src: string): number;
   mensure(src: string): [number, number];
   draw(src: string, x?: number, y?: number): void;
-  load(src: string): boolean;
+  load(src: string): number;
+  exists(src: string): boolean;
+  unload(src: string): void;
+  unload_all(): void;
 }
 
 /** @noSelf **/
@@ -191,6 +198,12 @@ interface GlyStdKey {
     menu: boolean;
     right: boolean;
     up: boolean;
+  };
+  media: undefined | {
+    ch_up: string;
+    ch_down: string;
+    vol_up: string;
+    vol_down: string;
   };
 }
 
@@ -349,6 +362,7 @@ export interface GlyStdWithHttpResponse extends GlyStd {
 
 /** @noSelf **/
 export interface GlyStd extends GlyStdLite {
+  setenv(key: string, value: string): string;
   bus: GlyStdBus;
   h: GlyStdJsx;
   node: GlyStdNode;
