@@ -1,0 +1,5 @@
+*.db
+*.js
+.DS_Store
+*-lock.json
+node_modules
