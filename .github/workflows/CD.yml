@@ -20,6 +20,13 @@ jobs:
       -
         uses: actions/checkout@master
       -
+        uses: actions/setup-node@v
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+      -
+        run: npm install -g npm@latest
+      -
         run: >-
           (jq -r .dependencies package.json && npm install) || true
         working-directory: ${{ github.event.inputs.npm }}
