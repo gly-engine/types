@@ -39,3 +39,4 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - 
         run: npm publish
+        working-directory: ${{ github.event.inputs.npm }}
