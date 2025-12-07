@@ -10,6 +10,7 @@ on:
 
 permissions:
   id-token: write
+  contents: read
   
 jobs:
   npm: 
@@ -18,6 +19,8 @@ jobs:
     steps:
       -
         uses: actions/checkout@master
+      -
+        run: npm install -g npm@latest
       -
         run: >-
           (jq -r .dependencies package.json && npm install) || true
@@ -32,11 +35,6 @@ jobs:
           "s#\"version\": *\"[^\"]*\"#\"version\": \"$(sed -n 's/.*@version\s\+\([0-9.]\+\).*/\1/p'
           ${{ github.event.inputs.npm }}/$(jq -r '.source // .main' ${{ github.event.inputs.npm }}/package.json))\"#"
           ${{ github.event.inputs.npm }}/package.json
-      -
-        uses: actions/setup-node@v2
-        with:
-          node-version: '20.x'
-          registry-url: 'https://registry.npmjs.org'
       - 
         run: npm publish
         working-directory: ${{ github.event.inputs.npm }}
