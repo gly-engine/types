@@ -1,5 +1,5 @@
 /**
- * @version 0.2.3
+ * @version 0.2.4
  */
 
 export type GlyNode = Record<string, unknown>;
@@ -312,6 +312,8 @@ interface GlyStdText {
   font_previous(): void;
   font_size(size: number): void;
   is_tui(): boolean;
+  mensure_height(src: string): number;
+  mensure_width(src: string): number;
   mensure(text: string | number): [number, number];
   print(x: number, y: number, text: string | number): void;
   print_ex(x: number, y: number, text: string | number, align_x?: -1 | 0 | 1, align_y?: -1 | 0 | 1): [number, number];
