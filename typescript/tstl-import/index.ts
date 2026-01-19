@@ -1,11 +1,20 @@
 /**
- * @version 0.0.2
+ * @version 0.0.3
  */
 import { execSync } from "child_process";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { createHash } from "crypto";
 import * as tstl from "typescript-to-lua";
+
+function tryResolve(src: string) {
+    try {
+        return require.resolve(src)
+    }
+    catch (_) {
+        return undefined
+    }
+}
 
 function isNodeModule(id: string) {
   return !id.startsWith(".") && !id.startsWith("/") && !id.includes(":");
@@ -44,16 +53,16 @@ const plugin: tstl.Plugin = {
     }
 
     const MODULE_NAME = getModuleName(moduleIdentifier);
-    const PATH_PACKAGE_JSON = require.resolve(`${MODULE_NAME}/package.json`);
+    const PATH_PACKAGE_JSON = tryResolve(`${MODULE_NAME}/package.json`);
 
-    if (MODULE_NAME === moduleIdentifier) {
+    if (PATH_PACKAGE_JSON && MODULE_NAME === moduleIdentifier) {
       const CFGS_PACKAGE_JSON = JSON.parse(readFileSync(PATH_PACKAGE_JSON).toString());
       const PATH_MAIN_MODULE = require.resolve(`${moduleIdentifier}/${CFGS_PACKAGE_JSON.main}`);
       const PATH_DIST_MODULE = `${options.outDir}/${moduleIdentifier}/dist`;
       return luaBuilder(PATH_PACKAGE_JSON, PATH_MAIN_MODULE, PATH_DIST_MODULE);
     }
 
-    if (emitHost.fileExists(`node_modules/${moduleIdentifier}.lua`)) {
+    if (PATH_PACKAGE_JSON && emitHost.fileExists(`node_modules/${moduleIdentifier}.lua`)) {
       const FRAGMENT = moduleIdentifier.slice(MODULE_NAME.length + 1);
       const IDENTIFIER = createHash("md5").update(moduleIdentifier).digest("hex").slice(0, 7);
       const PATH_DIST_MODULE = `${MODULE_NAME}-${IDENTIFIER}/${FRAGMENT}`;
